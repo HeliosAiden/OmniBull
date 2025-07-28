@@ -6,6 +6,12 @@ import { ThemeProvider } from 'next-themes'
 import { SolanaProvider } from "@/lib/chains/solana";
 import { EVMProvider } from "@/lib/chains/evm";
 
+import { SideBarProvider, useSideBar } from "@/contexts/SideBarContext";
+import LayoutShell from "@/app/components/LayoutShell";
+import Sidebar from "@/app/components/SideBar";
+
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,13 +42,19 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon-16x16.png" />
         <link rel="manifest" href="/images/logo/site.webmanifest"></link>
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <EVMProvider>
             <SolanaProvider>
-              {children}
+              <div className="flex flex-col md:flex-row min-h-screen">
+                <SideBarProvider>
+                  <LayoutShell>
+                    <main className="flex-1 bg-white dark:bg-[#0a0a0a] p-6 overflow-y-auto">
+                      {children}
+                    </main>
+                  </LayoutShell>
+                </SideBarProvider>
+              </div>
             </SolanaProvider>
           </EVMProvider>
         </ThemeProvider>
