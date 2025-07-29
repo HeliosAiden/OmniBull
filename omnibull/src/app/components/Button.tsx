@@ -1,11 +1,15 @@
-// components/ui/Button.tsx
-
 import React from "react";
-import type { ButtonHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, AnchorHTMLAttributes } from "react";
 import clsx from "clsx";
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "default" | "outline" | "ghost";
+type Variant = "default" | "outline" | "ghost";
+type ButtonOrLinkProps =
+  | ({ as?: "button" } & ButtonHTMLAttributes<HTMLButtonElement>)
+  | ({ as: "a" } & AnchorHTMLAttributes<HTMLAnchorElement>);
+
+type Props = ButtonOrLinkProps & {
+  variant?: Variant;
+  className?: string;
 };
 
 const baseStyles =
@@ -17,11 +21,12 @@ const variants = {
   ghost: "hover:bg-gray-100 dark:hover:bg-gray-800",
 };
 
-export const Button = ({ className, variant = "default", ...props }: Props) => {
-  return (
-    <button
-      className={clsx(baseStyles, variants[variant], className)}
-      {...props}
-    />
-  );
+export const Button = ({ as = "button", variant = "default", className, ...props }: Props) => {
+  const classes = clsx(baseStyles, variants[variant], className);
+
+  if (as === "a") {
+    return <a className={classes} {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)} />;
+  }
+
+  return <button className={classes} {...(props as ButtonHTMLAttributes<HTMLButtonElement>)} />;
 };

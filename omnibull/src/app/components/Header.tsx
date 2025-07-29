@@ -11,6 +11,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useState, useEffect } from "react";
 
 import UserInfoMenu from "@/app/components/UserInfoMenu";
+import ConnectWalletModal from "@/app/components/modals/ConnectWalletModal";
 
 
 export default function Header() {
@@ -23,6 +24,8 @@ export default function Header() {
   const isAuthenticated = !!session || evmConnected || solanaConnected;
 
   const [mounted, setMounted] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
+
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
@@ -44,7 +47,7 @@ export default function Header() {
           <UserInfoMenu />
         ) : (
           <>
-            <Button variant="default" onClick={() => console.log("Connect Wallet Modal")}>
+            <Button variant="default" onClick={() => setWalletModalOpen(true)}>
               Connect Wallet
             </Button>
             <Button variant="outline" onClick={() => console.log("Open Login")}>
@@ -61,6 +64,7 @@ export default function Header() {
           {theme === "dark" ? "Light" : "Dark"}
         </Button>
       </div>
+      <ConnectWalletModal isOpen={walletModalOpen} onClose={() => setWalletModalOpen(false)} />
     </header>
   );
 }

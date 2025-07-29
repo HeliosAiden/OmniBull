@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.6",
     "@rainbow-me/rainbowkit": "^2.2.8",
     "@solana/wallet-adapter-base": "^0.9.27",
     "@solana/wallet-adapter-react": "^0.15.39",
@@ -22,6 +23,7 @@
     "add": "^2.0.6",
     "button": "^1.1.1",
     "init": "^0.1.2",
+    "lucide-react": "^0.532.0",
     "next": "15.4.3",
     "next-themes": "^0.4.6",
     "react": "19.1.0",
