@@ -15,38 +15,41 @@ function QuickConnectButton() {
         return (
           <div
             aria-hidden={!ready}
-            className="transition-all duration-300"
+            className="transition-all duration-300 space-y-3"
           >
-            {connected ? (
-              <button
-                className="w-full flex items-center justify-between px-6 py-3
-                           bg-gradient-to-r from-green-400 via-emerald-500 to-teal-500
-                           text-white rounded-xl shadow-md
-                           hover:shadow-lg transition-all duration-300"
-              >
-                {account.displayName}
-              </button>
-            ) : (
-              <button
-                onClick={openConnectModal}
-                className="w-full flex items-center justify-between px-6 py-3
-                           bg-gradient-to-r from-blue-400 via-navy-500 to-teal-500
-                           text-white font-bold rounded-xl shadow-lg
-                           hover:brightness-110 hover:cursor-pointer
-                           transition-all duration-300"
-              >
-                <div className="flex items-center gap-2">
-                  <span>Quick Connect</span>
-                  <div>⚡</div> 
-                </div>
-              </button>
-            )}
+            <button
+              onClick={!connected ? openConnectModal : undefined}
+              className="w-full flex items-center justify-between px-6 py-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition hover:cursor-pointer"
+            >
+              <div className="flex items-center gap-2">
+                {connected ? (
+                  <>
+                    <span>{account.displayName}</span>
+                    <span className="text-xs bg-white bg-opacity-20 px-2 py-0.5 rounded-md">
+                      Connected
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span>Quick Connect (EVM)</span>
+                    <span className="text-xs bg-blue-200 dark:bg-zinc-600 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-md">
+                      Recommended
+                    </span>
+                  </>
+                )}
+              </div>
+
+              <div className="w-8 h-8 relative">
+                <Image src="/images/icon/etherium.png" alt="EVM" fill />
+              </div>
+            </button>
           </div>
         );
       }}
     </ConnectButton.Custom>
   );
 }
+
 
 
 
