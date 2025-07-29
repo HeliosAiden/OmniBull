@@ -142,9 +142,9 @@ export default function ConnectWalletModal({ isOpen, onClose }: ConnectWalletMod
               {/* Wallet Panels */}
               <div className="pt-2">
                 {tab === "evm" ? (
-                  <EvmConnectPanel onConnected={onClose} />
+                  <EvmConnectPanel />
                 ) : (
-                  <SolanaConnectPanel onConnected={onClose} />
+                  <SolanaConnectPanel />
                 )}
               </div>
             </>

@@ -1,17 +1,15 @@
 "use client";
 
 import { Button } from "@/app/components/Button";
+import { handleConnectWallet } from "@/lib/wallet/connectors";
+import Image from "next/image";
 
-export default function EvmConnectPanel({
-  onConnected,
-}: {
-  onConnected?: () => void;
-}) {
+export default function EvmConnectPanel() {
 
   const wallets = [
-    { name: "OKX Wallet", icon: <img src="/images/icon/okx.png" alt="OKX" />, isRecent: true },
-    { name: "MetaMask", icon: <img src="/images/icon/metamask.png" alt="Meta Mask" /> },
-    { name: "Phantom", icon: <img src="/images/icon/phantom.png" alt="Phantom" /> },
+    { name: "OKX", icon: <Image width={24} height={24} src="/images/icon/okx.png" alt="OKX" />, isRecent: true },
+    { name: "MetaMask", icon: <Image width={24} height={24} src="/images/icon/metamask.png" alt="Meta Mask" /> },
+    { name: "Phantom", icon: <Image width={24} height={24} src="/images/icon/phantom.png" alt="Phantom" /> },
     { name: "Other Wallet", icon: null }, // svg icon
   ];
 
@@ -23,7 +21,7 @@ export default function EvmConnectPanel({
         {wallets.map((wallet, i) => (
           <button
             key={i}
-            onClick={onConnected}
+            onClick={() => handleConnectWallet(wallet.name)}
             className="w-full flex items-center justify-between px-6 py-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition hover:cursor-pointer"
           >
             <div className="flex items-center gap-2">

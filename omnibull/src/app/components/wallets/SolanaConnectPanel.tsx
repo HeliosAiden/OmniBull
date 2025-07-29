@@ -8,7 +8,7 @@ const WalletMultiButton = dynamic(
   { ssr: false }
 );
 
-export default function SolanaConnectPanel({ onConnected }: { onConnected?: () => void }) {
+export default function SolanaConnectPanel() {
   return (
     <div className="text-center">
       <WalletMultiButton />

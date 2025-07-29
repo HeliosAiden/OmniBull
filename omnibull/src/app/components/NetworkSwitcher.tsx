@@ -6,7 +6,6 @@ export default function NetworkSwitcher() {
   const chainId = useChainId()
   const { isConnected } = useAccount()
 
-  console.log('chains: ' + chains)
   if (!isConnected) return null
 
 

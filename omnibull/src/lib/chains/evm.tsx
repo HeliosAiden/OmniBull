@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 import { 
   WagmiProvider,
   http,
-  WagmiConfig  // For v1 compatibility (if needed)
+  // WagmiConfig  // For v1 compatibility (if needed)
 } from 'wagmi'
 // import { mainnet, sepolia } from 'wagmi/chains'
 import {
@@ -19,15 +19,16 @@ import {
 } from 'viem/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit'
+import { PROJECT_ID } from '@/constants'
 import '@rainbow-me/rainbowkit/styles.css'
 
 export const chains = [mainnet, sepolia, optimism, arbitrum, polygon, base, avalanche, bsc] as const
 
-const projectId: string = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? ''
 
 export const config = getDefaultConfig({
   appName: 'OmniBull',
-  projectId: projectId, // Required for WalletConnect
+  appDescription: 'Hybrid CEX + DEX analytics & journaling tool',
+  projectId: PROJECT_ID, // Required for WalletConnect
   chains,
   transports: {
     [mainnet.id]: http('https://rpc.ankr.com/eth'),
