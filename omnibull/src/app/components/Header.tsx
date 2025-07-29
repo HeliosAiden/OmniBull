@@ -55,14 +55,6 @@ export default function Header() {
             </Button>
           </>
         )}
-
-        {/* Theme Toggle */}
-        <Button
-          variant="outline"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        >
-          {theme === "dark" ? "Light" : "Dark"}
-        </Button>
       </div>
       <ConnectWalletModal isOpen={walletModalOpen} onClose={() => setWalletModalOpen(false)} />
     </header>

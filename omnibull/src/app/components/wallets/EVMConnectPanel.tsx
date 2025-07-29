@@ -1,8 +1,54 @@
 "use client";
 
 import { Button } from "@/app/components/Button";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { handleConnectWallet } from "@/lib/wallet/connectors";
 import Image from "next/image";
+
+function QuickConnectButton() {
+  return (
+    <ConnectButton.Custom>
+      {({ account, chain, openConnectModal, mounted }) => {
+        const ready = mounted;
+        const connected = ready && account && chain;
+
+        return (
+          <div
+            aria-hidden={!ready}
+            className="transition-all duration-300"
+          >
+            {connected ? (
+              <button
+                className="w-full flex items-center justify-between px-6 py-3
+                           bg-gradient-to-r from-green-400 via-emerald-500 to-teal-500
+                           text-white rounded-xl shadow-md
+                           hover:shadow-lg transition-all duration-300"
+              >
+                {account.displayName}
+              </button>
+            ) : (
+              <button
+                onClick={openConnectModal}
+                className="w-full flex items-center justify-between px-6 py-3
+                           bg-gradient-to-r from-blue-400 via-navy-500 to-teal-500
+                           text-white font-bold rounded-xl shadow-lg
+                           hover:brightness-110 hover:cursor-pointer
+                           transition-all duration-300"
+              >
+                <div className="flex items-center gap-2">
+                  <span>Quick Connect</span>
+                  <div>⚡</div> 
+                </div>
+              </button>
+            )}
+          </div>
+        );
+      }}
+    </ConnectButton.Custom>
+  );
+}
+
+
 
 export default function EvmConnectPanel() {
 
@@ -14,28 +60,35 @@ export default function EvmConnectPanel() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
+      {/* Quick Connect */}
+      <QuickConnectButton />
 
-      {/* Wallet Options */}
-      <div className="space-y-3">
-        {wallets.map((wallet, i) => (
-          <button
-            key={i}
-            onClick={() => handleConnectWallet(wallet.name)}
-            className="w-full flex items-center justify-between px-6 py-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition hover:cursor-pointer"
-          >
-            <div className="flex items-center gap-2">
-              <span>{wallet.name}</span>
-              {wallet.isRecent && (
-                <span className="text-xs bg-blue-200 dark:bg-zinc-600 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-md">
-                  Recent
-                </span>
-              )}
-            </div>
-            <div className="w-8 h-8">{wallet.icon}</div>
-          </button>
-        ))}
+      {/* Divider */}
+      <div className="flex items-center justify-center gap-2 text-gray-400 text-sm">
+        <div className="h-px flex-1 bg-gray-300 dark:bg-zinc-700" />
+        <span className="text-xs uppercase tracking-wide">or</span>
+        <div className="h-px flex-1 bg-gray-300 dark:bg-zinc-700" />
       </div>
+
+      {/* Manual Wallet Options */}
+      {wallets.map((wallet, i) => (
+        <button
+          key={i}
+          onClick={() => handleConnectWallet(wallet.name)}
+          className="w-full flex items-center justify-between px-6 py-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition hover:cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <span>{wallet.name}</span>
+            {wallet.isRecent && (
+              <span className="text-xs bg-blue-200 dark:bg-zinc-600 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-md">
+                Recent
+              </span>
+            )}
+          </div>
+          <div className="w-8 h-8">{wallet.icon}</div>
+        </button>
+      ))}
 
       {/* No wallet button */}
       <Button 
