@@ -6,10 +6,8 @@ import { ThemeProvider } from 'next-themes'
 import { SolanaProvider } from "@/lib/chains/solana";
 import { EVMProvider } from "@/lib/chains/evm";
 
-import { SideBarProvider, useSideBar } from "@/contexts/SideBarContext";
-import LayoutShell from "@/app/components/LayoutShell";
-import Sidebar from "@/app/components/SideBar";
-
+import { SideBarProvider } from "@/contexts/SideBarContext";
+import LayoutRouter from "@/app/components/layouts/LayoutRouter";
 
 
 const geistSans = Geist({
@@ -32,6 +30,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -46,18 +47,15 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <EVMProvider>
             <SolanaProvider>
-              <div className="flex flex-col md:flex-row min-h-screen">
-                <SideBarProvider>
-                  <LayoutShell>
-                    <main className="flex-1 bg-white dark:bg-[#0a0a0a] p-6 overflow-y-auto">
-                      {children}
-                    </main>
-                  </LayoutShell>
-                </SideBarProvider>
-              </div>
+              <SideBarProvider>
+                <LayoutRouter>
+                  {children}
+                </LayoutRouter>
+              </SideBarProvider>
             </SolanaProvider>
           </EVMProvider>
         </ThemeProvider>
+
       </body>
     </html>
   );
