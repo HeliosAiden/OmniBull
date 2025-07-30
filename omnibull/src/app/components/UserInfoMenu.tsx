@@ -6,7 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import NetworkSwitcher from "@/app/components/NetworkSwitcher";
 import { useSupabaseSession } from "@/contexts/SupabaseSessionContext";
 
-import { Button } from "./Button";
+import { Button } from "@/app/components/Button";
 
 
 export default function UserInfoMenu() {

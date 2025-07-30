@@ -18,7 +18,26 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { theme } = useTheme();
 
   const authAppearance = {
-    theme: ThemeSupa
+    theme: ThemeSupa,
+    classNames: {
+      container: "rounded-xl shadow-lg p-4 bg-white dark:bg-zinc-900",
+      button: "bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-4 rounded-lg w-full transition",
+      anchor: "text-emerald-600 hover:underline text-sm",
+      label: "text-gray-700 dark:text-gray-300 text-sm font-medium",
+      input: "border border-gray-300 dark:border-zinc-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white dark:bg-zinc-800",
+      loader: "text-emerald-500",
+      message: "text-sm text-red-500",
+    },
+    variables: {
+      default: {
+        colors: {
+          brand: "#16C784",
+          brandAccent: "#22D69F",
+          inputText: "#ffffffff",
+          inputLabelText: "#6B7280",
+        },
+      },
+    },
   };
 
   return (
