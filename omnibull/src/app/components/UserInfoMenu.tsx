@@ -3,11 +3,14 @@
 import { supabase } from "@/lib/supabase";
 import { useAccount, useDisconnect } from "wagmi";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useSession } from "@supabase/auth-helpers-react";
 import NetworkSwitcher from "@/app/components/NetworkSwitcher";
+import { useSupabaseSession } from "@/contexts/SupabaseSessionContext";
+
+import { Button } from "./Button";
+
 
 export default function UserInfoMenu() {
-  const session = useSession();
+  const session = useSupabaseSession();
   const { address: evmAddress, isConnected: evmConnected } = useAccount();
   const { disconnect: disconnectEvm } = useDisconnect();
   const { publicKey: solanaKey, disconnect: disconnectSolana, connected: solanaConnected } = useWallet();
@@ -47,12 +50,13 @@ export default function UserInfoMenu() {
 
       {/* Logout / Disconnect */}
       {(session || evmConnected || solanaConnected) && (
-        <button
+        <Button
+          variant="outline"
           onClick={handleLogoutOrDisconnect}
-          className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition"
+          className="text-white px-2 py-1 rounded hover:bg-red-600 transition hover:cursor-pointer"
         >
           {session ? "Logout" : "Disconnect"}
-        </button>
+        </Button>
       )}
     </div>
   );

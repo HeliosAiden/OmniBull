@@ -9,6 +9,8 @@ import { EVMProvider } from "@/lib/chains/evm";
 import { SideBarProvider } from "@/contexts/SideBarContext";
 import LayoutRouter from "@/app/components/layouts/LayoutRouter";
 
+import { SupabaseSessionProvider } from "@/contexts/SupabaseSessionContext";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,15 +47,17 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <EVMProvider>
-            <SolanaProvider>
-              <SideBarProvider>
-                <LayoutRouter>
-                  {children}
-                </LayoutRouter>
-              </SideBarProvider>
-            </SolanaProvider>
-          </EVMProvider>
+          <SupabaseSessionProvider>
+            <EVMProvider>
+              <SolanaProvider>
+                <SideBarProvider>
+                  <LayoutRouter>
+                    {children}
+                  </LayoutRouter>
+                </SideBarProvider>
+              </SolanaProvider>
+            </EVMProvider>
+          </SupabaseSessionProvider>
         </ThemeProvider>
 
       </body>

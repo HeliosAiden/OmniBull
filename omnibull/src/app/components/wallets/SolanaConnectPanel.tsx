@@ -43,10 +43,11 @@ export default function SolanaConnectPanel() {
       </button>
 
       <Button
-        href="https://solana.com/vi/solana-wallets"
+        href="https://solana.com/vi/solana-wallets/"
         target="_blank"
         rel="noopener noreferrer"
         variant="ghost"
+        as="a"
         className="w-full py-3 flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white mt-4"
       >
         I don’t have a wallet
