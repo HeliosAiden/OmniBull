@@ -15,11 +15,6 @@ export default function LayoutRouter({ children }: { children: React.ReactNode }
 
   const isAuthenticated = !!session || evmConnected || solanaConnected;
 
-  console.log('isAuthenticated: ' + isAuthenticated)
-  console.log(session)
-  console.log('evmConnected: ' + evmConnected)
-  console.log('solanaConnected: ' + solanaConnected)
-
   return isAuthenticated ? (
     <AppShell>{children}</AppShell>
   ) : (

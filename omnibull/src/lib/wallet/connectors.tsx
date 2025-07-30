@@ -8,8 +8,7 @@ export async function handleConnectWallet(walletName: string) {
 
   switch (walletName) {
     case 'OKX':
-      console.log('access OKX Wallet')
-      connector = injected({ target: 'metaMask', shimDisconnect: true }) // For some reason metaMask -> OKexWallet
+      connector = injected({ target: 'okxWallet', shimDisconnect: true })
       break
     case 'MetaMask':
       connector = injected({ target: 'metaMask', shimDisconnect: true })
