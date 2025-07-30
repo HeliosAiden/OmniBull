@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAccount, useDisconnect } from "wagmi";
 import { useWallet } from "@solana/wallet-adapter-react";
 import NetworkSwitcher from "@/app/components/NetworkSwitcher";
 import { useSupabaseSession } from "@/contexts/SupabaseSessionContext";
-
+import WalletInfoModal from "@/app/components/modals/WalletInfoModal";
+import Image from "next/image";
 import { Button } from "@/app/components/Button";
 
 
@@ -14,15 +16,53 @@ export default function UserInfoMenu() {
   const { address: evmAddress, isConnected: evmConnected } = useAccount();
   const { disconnect: disconnectEvm } = useDisconnect();
   const { publicKey: solanaKey, disconnect: disconnectSolana, connected: solanaConnected } = useWallet();
+  const [openWalletInfoModal, setOpenWalletInfoModal] = useState<boolean>(false)
 
+  const isSolana = solanaConnected && solanaKey;
+  const isEvm = evmConnected && evmAddress;
+  
   const handleLogoutOrDisconnect = () => {
     if (session) supabase.auth.signOut();
-    if (evmConnected) disconnectEvm();
-    if (solanaConnected) disconnectSolana();
+    if (isEvm) disconnectEvm();
+    if (isSolana) disconnectSolana();
   };
+
+  const walletAddress: string =
+    isSolana
+      ? solanaKey.toBase58()
+      : isEvm
+      ? evmAddress
+      : '';
+
+  const onDisconnect = isSolana
+      ? disconnectSolana
+      : isEvm
+      ? disconnectEvm
+      : () => {};
 
   return (
     <div className="flex items-center gap-3 text-sm text-gray-300">
+      <WalletInfoModal 
+        isOpen={openWalletInfoModal} 
+        onClose={() => setOpenWalletInfoModal(false)} 
+        address={walletAddress} 
+        onDisconnect={onDisconnect}
+        balance="1.23"
+        chain={isSolana ? "Solana" : isEvm ? "Ethereum" : undefined}
+        chainIconUrl={isSolana
+          ? "/images/icon/solana.png"
+          : isEvm
+          ? "/images/icon/etherium.png"
+          : undefined
+        }
+        walletIconUrl={ isSolana
+          ? "/images/icon/phantom.png"
+          : isEvm
+          ? "/images/icon/okx.png"
+          : undefined
+        }
+      />
+
       {/* Supabase Email */}
       {session?.user?.email && (
         <span className="px-2 py-1 rounded bg-white/10">
@@ -31,22 +71,23 @@ export default function UserInfoMenu() {
       )}
 
       {/* EVM Wallet */}
-      {evmConnected && (
-        <span className="px-2 py-1 rounded bg-white/10">
-          {evmAddress?.slice(0, 6)}...{evmAddress?.slice(-4)}
-        </span>
+      {evmConnected && evmAddress && (
+        <Button variant="ghost" onClick={() => setOpenWalletInfoModal(true)} className="flex items-center gap-2 px-2 py-1 rounded bg-white/10 hover:bg-white/20 transition text-white hover:cursor-pointer">
+          <Image src="/images/icon/okx.png" alt="OKX Wallet" height={22} width={22} />
+          {evmAddress.slice(0, 6)}...{evmAddress.slice(-4)}
+        </Button>
       )}
 
       {/* Solana Wallet */}
-      {solanaConnected && (
-        <span className="px-2 py-1 rounded bg-white/10">
-          {solanaKey?.toBase58().slice(0, 6)}...
-          {solanaKey?.toBase58().slice(-4)}
-        </span>
-      )}
+      {solanaConnected && solanaKey && (
+      <Button variant="ghost" onClick={() => setOpenWalletInfoModal(true)} className="flex items-center gap-2 px-2 py-1 rounded bg-white/10 hover:bg-white/20 transition text-white hover:cursor-pointer">
+        <Image src="/images/icon/phantom.png" alt="Phantom Wallet" height={22} width={22} />
+        {solanaKey.toBase58().slice(0, 6)}...{solanaKey.toBase58().slice(-4)}
+      </Button>
+    )}
 
       {/* Network Switcher */}
-      {evmConnected || solanaConnected && <NetworkSwitcher />}
+      {(evmConnected || solanaConnected) && <NetworkSwitcher />}
 
       {/* Logout / Disconnect */}
       {(session || evmConnected || solanaConnected) && (
