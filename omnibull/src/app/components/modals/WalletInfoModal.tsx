@@ -108,7 +108,7 @@ export default function WalletInfoModal({
             onClose={() => setCopied(false)}
             message="Address copied"
             icon={<Check className="w-4 h-4 text-green-400" />}
-            position="bottom-right"
+            position="top-right"
           />
         </Dialog.Panel>
       </div>
