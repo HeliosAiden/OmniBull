@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import clsx from "clsx";
 
+import IconButton from "@/app/components/IconButton";
+
 type SnackbarProps = {
   open: boolean;
   onClose?: () => void;
@@ -60,9 +62,9 @@ export default function Snackbar({
         </div>
         <div className="flex items-center gap-2">
           {action}
-          <button onClick={() => { setVisible(false); onClose?.(); }}>
+          <IconButton className="hover:text-red" onClick={() => { setVisible(false); onClose?.(); }}>
             <X className="w-4 h-4 text-white/60 hover:text-white" />
-          </button>
+          </IconButton>
         </div>
       </div>
     </div>

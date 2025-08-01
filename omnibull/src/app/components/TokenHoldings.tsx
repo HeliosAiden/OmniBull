@@ -5,7 +5,7 @@ import { fetchTokenHoldings } from '@/utils/fetchTokenHoldings';
 import Table from '@/app/components/Table';
 
 import { Token } from '@/types/token'
-import { getTokenLogo } from '@/utils/getTokenLogo'
+import { getTokenLogoURL } from '@/utils/getTokenLogo'
 import Image from 'next/image';
 
 
@@ -37,7 +37,7 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
               render: (_, row) => (
                 <div className="flex items-center gap-2">
                   <Image
-                    src={getTokenLogo(row.symbol)}
+                    src={getTokenLogoURL(row.symbol)}
                     width={20}
                     height={20}
                     alt={row.symbol}
@@ -85,6 +85,7 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
           ]}
           data={tokens}
           emptyText="No token holdings found."
+          rowsPerPage={5}
         />
       )}
     </div>
