@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@ensdomains/ensjs": "^4.0.2",
-    "@headlessui/react": "^2.2.6",
+    "@headlessui/react": "^2.2.7",
     "@radix-ui/react-dialog": "^1.1.14",
     "@rainbow-me/rainbowkit": "^2.2.8",
     "@solana/wallet-adapter-base": "^0.9.27",

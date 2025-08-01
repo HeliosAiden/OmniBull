@@ -9,13 +9,13 @@ import { getTokenLogo } from '@/utils/getTokenLogo'
 import Image from 'next/image';
 
 
-export default function TokenHoldingsView({ address }: { address: string }) {
+export default function TokenHoldingsView({ address, chainKey }: { address: string, chainKey: string }) {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    fetchTokenHoldings(address)
+    fetchTokenHoldings(address, chainKey)
       .then((data) => setTokens(data))
       .finally(() => setLoading(false));
   }, [address]);
@@ -31,26 +31,57 @@ export default function TokenHoldingsView({ address }: { address: string }) {
       ) : (
         <Table<Token>
           columns={[
-            { key: 'symbol', label: 'Symbol', render: (val) => <span><Image src={getTokenLogo(val)} width={20} height={20} alt={val} /></span> },
-            { key: 'name', label: 'Name' },
+            {
+              key: 'symbol',
+              label: 'Asset',
+              render: (_, row) => (
+                <div className="flex items-center gap-2">
+                  <Image
+                    src={getTokenLogo(row.symbol)}
+                    width={20}
+                    height={20}
+                    alt={row.symbol}
+                    className="rounded-full"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-white font-medium">{row.symbol}</span>
+                    <span className="text-xs text-gray-400">{row.name}</span>
+                  </div>
+                </div>
+              ),
+            },
+            {
+              key: 'price',
+              label: 'Price',
+              align: 'right',
+              render: (val: Token['price']) =>
+                val ? `$${Number(val).toLocaleString(undefined, { maximumFractionDigits: 6 })}` : '-',
+            },
             {
               key: 'balance',
-              label: 'Balance',
-              render: (val, row) =>
-                (Number(val) / 10 ** row.decimals).toLocaleString(undefined, {
+              label: 'Holdings',
+              align: 'right',
+              render: (val, row) => {
+                const formatted = Number(val) / 10 ** row.decimals;
+                return `${formatted.toLocaleString(undefined, {
                   maximumFractionDigits: 6,
-                }),
+                })} ${row.symbol}`;
+              },
             },
-            ...(tokens[0]?.price
-              ? [
-                  {
-                    key: 'price' as keyof Token,
-                    label: 'Price (USD)',
-                    render: (val: Token['price']) =>
-                      val ? `$${Number(val).toLocaleString()}` : '-',
-                  },
-                ]
-              : []),
+            {
+              key: 'balance',
+              label: 'Value',
+              align: 'right',
+              render: (val, row) => {
+                const quantity = Number(val) / 10 ** row.decimals;
+                const value = row.price ? quantity * Number(row.price) : 0;
+                return row.price
+                  ? `$${value.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}`
+                  : '-';
+              },
+            },
           ]}
           data={tokens}
           emptyText="No token holdings found."

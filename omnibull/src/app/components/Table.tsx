@@ -28,9 +28,9 @@ export default function Table<T>({
       <table className="min-w-full text-sm text-white font-medium">
         <thead>
           <tr className="bg-[#151A28] text-[#9CA3AF] uppercase text-xs tracking-wider">
-            {columns.map((col) => (
+            {columns.map((col, index) => (
               <th
-                key={String(col.key)}
+                key={index}
                 className={clsx(
                   "px-4 py-3 whitespace-nowrap",
                   col.align === "right" ? "text-right" : "text-left"
@@ -54,9 +54,9 @@ export default function Table<T>({
                 key={idx}
                 className="border-t border-[#1F2937] hover:bg-[#1B2332] transition-colors"
               >
-                {columns.map((col) => (
+                {columns.map((col, index) => (
                   <td
-                    key={String(col.key)}
+                    key={index}
                     className={clsx(
                       "px-4 py-3 whitespace-nowrap",
                       col.align === "right" ? "text-right" : "text-left",

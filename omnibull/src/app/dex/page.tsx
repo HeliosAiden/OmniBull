@@ -6,7 +6,7 @@ export default function DexPage() {
   
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-6 mx-auto">
       <WalletViewer />
     </div>
   );
