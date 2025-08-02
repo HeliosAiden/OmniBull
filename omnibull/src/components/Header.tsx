@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/app/components/Button";
+import { Button } from "@/components/Button";
 
 import { useAccount } from "wagmi";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 import { useState, useEffect } from "react";
 
-import UserInfoMenu from "@/app/components/UserInfoMenu";
-import ConnectWalletModal from "@/app/components/modals/ConnectWalletModal";
-import LoginModal from "@/app/components/modals/LoginModal"
+import UserInfoMenu from "@/components/UserInfoMenu";
+import ConnectWalletModal from "@/components/modals/ConnectWalletModal";
+import LoginModal from "@/components/modals/LoginModal"
 
 import { useSupabaseSession } from "@/contexts/SupabaseSessionContext";
 

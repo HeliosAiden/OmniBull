@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAccount } from 'wagmi';
-import TokenHoldingsView from '@/app/components/TokenHoldings';
-import { Button } from '@/app/components/Button';
-import ChainSelector from '@/app/components/ChainSelector'
+import TokenHoldingsView from '@/components/TokenHoldings';
+import { Button } from '@/components/Button';
+import ChainSelector from '@/components/ChainSelector'
 import { SUPPORTED_CHAINS } from '@/constants';
 
 export default function WalletViewer() {

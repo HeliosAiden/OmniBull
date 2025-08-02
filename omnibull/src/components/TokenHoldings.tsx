@@ -2,25 +2,57 @@
 
 import { useEffect, useState } from 'react';
 import { fetchTokenHoldings } from '@/utils/fetchTokenHoldings';
-import Table from '@/app/components/Table';
-
-import { Token } from '@/types/token'
-import { getTokenLogoURL } from '@/utils/getTokenLogo'
+import { fetchCmcPrices } from '@/lib/cmc/fetchTokenPrices';
+import Table from '@/components/Table';
 import Image from 'next/image';
-
+import { getTokenLogoURL } from '@/utils/getTokenLogo';
+import { Token } from '@/types/token';
+import { formatPriceCMCStyle } from '@/utils/formatTokenPrice'
 
 export default function TokenHoldingsView({ address, chainKey }: { address: string, chainKey: string }) {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    fetchTokenHoldings(address, chainKey)
-      .then((data) => setTokens(data))
-      .finally(() => setLoading(false));
-  }, [address]);
+    const loadHoldingsWithPrices = async () => {
+      try {
+        setLoading(true);
 
-  console.log(tokens)
+        // 1. Fetch token holdings
+        const holdings = await fetchTokenHoldings(address, chainKey);
+
+        // 2. Extract unique token symbols
+        const uniqueSymbols = [...new Set(holdings.map(t => t.symbol.toUpperCase()))];
+
+        // 3. Fetch prices from CoinMarketCap
+        const cmcData = await fetchCmcPrices(uniqueSymbols);
+
+        // 4. Merge prices into tokens
+        const enriched = holdings.map((token) => {
+          const symbol = token.symbol.toUpperCase();
+          const cmcInfo = cmcData[symbol]?.quote?.USD;
+          const price = typeof cmcInfo?.price === 'number' ? cmcInfo.price : undefined;
+          return {
+            ...token,
+            price,
+            // Ensure all Token properties are present
+            balance: token.balance,
+            decimals: token.decimals,
+            name: token.name,
+            symbol: token.symbol,
+          };
+        });
+
+        setTokens(enriched);
+      } catch (err) {
+        console.error('Failed to load token prices:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadHoldingsWithPrices();
+  }, [address, chainKey]);
 
   return (
     <div className="p-4 space-y-4">
@@ -54,8 +86,10 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
               key: 'price',
               label: 'Price',
               align: 'right',
-              render: (val: Token['price']) =>
-                val ? `$${Number(val).toLocaleString(undefined, { maximumFractionDigits: 6 })}` : '-',
+              render: (_, row) =>
+                row.price
+                  ? `$${Number(row.price).toLocaleString(undefined, { maximumFractionDigits: 6 })}`
+                  : '-',
             },
             {
               key: 'balance',

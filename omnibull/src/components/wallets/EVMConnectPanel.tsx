@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/app/components/Button";
+import { Button } from "@/components/Button";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { handleConnectWallet } from "@/lib/wallet/connectors";
 import Image from "next/image";

@@ -1,6 +1,8 @@
 import Moralis from 'moralis';
 import { initMoralis } from '@/lib/moralis';
 
+import { filterValidAndSafeTokens } from '@/utils/validateToken'
+
 const CHAIN_MAP: Record<string, string> = {
   eth: '0x1',
   polygon: '0x89',
@@ -23,5 +25,6 @@ export async function fetchTokenHoldings(address: string, chainKey: string = 'et
     chain,
   });
 
-  return response.toJSON();
+  return filterValidAndSafeTokens(response.toJSON());
+
 }

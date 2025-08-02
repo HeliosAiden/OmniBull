@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, LayoutDashboard, Wallet, BarChart } from "lucide-react";
-import IconButton from "@/app/components/IconButton";
+import IconButton from "@/components/IconButton";
 
 export default function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(true);

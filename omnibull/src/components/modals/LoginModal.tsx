@@ -7,7 +7,7 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useTheme } from "next-themes";
 import { supabase } from "@/lib/supabase";
 import { X } from "lucide-react";
-import IconButton from "@/app/components/IconButton";
+import IconButton from "@/components/IconButton";
 
 interface LoginModalProps {
   isOpen: boolean;

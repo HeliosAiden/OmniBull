@@ -1,5 +1,6 @@
 export const PROJECT_ID:string = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? ''
 export const MORALIS_API_KEY:string = process.env.NEXT_PUBLIC_MORALIS_API_KEY ?? ''
+export const CMC_API_KEY:string = process.env.NEXT_PUBLIC_CMC_API_KEY ?? ''
 
 export const SUPPORTED_CHAINS = {
   btc: 'Bitcoin',
@@ -23,7 +24,7 @@ export const CHAIN_TICKER = {
     polygon: 'MATIC',
 }
 
-export const CHAIN_TICKER_URL_MAP: Record<string, string> = {
+export const TOKEN_TICKER_URL_MAP: Record<string, string> = {
   "BTC": "/images/icon/token/L1/bitcoin.png",
   "ETH": "/images/icon/token/L1/ethereum.png", // ✅ fixed
   "USDC": "/images/icon/token/stablecoin/usd-coin.png", // ✅ fixed
@@ -72,3 +73,34 @@ export const CHAIN_TICKER_URL_MAP: Record<string, string> = {
   "LINEA": "/images/icon/token/L2/linea.png",
   "OP": "/images/icon/token/L2/optimism.png",
 };
+
+export const CMC_SYMBOLS = [
+  "BTC",
+  "ETH",
+  "USDT",
+  "USDC",
+  "SOL",
+  "MATIC",
+  "ARB",
+  "AVAX",
+  "BNB",
+  "TRX",
+  "DOGE",
+  "SHIB",
+  "UNI",
+  "LINK",
+  "AAVE",
+  "DAI",
+  "TON",
+  "ONDO",
+  "PYUSD",
+  "LINK",
+  "VIRTUAL",
+  "PEPE",
+  "OP",
+  "LINEA",
+  "BASE",
+  "CBBTC",
+  "UNI",
+  "S",
+];

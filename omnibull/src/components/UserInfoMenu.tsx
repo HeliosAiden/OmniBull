@@ -4,11 +4,11 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAccount, useDisconnect } from "wagmi";
 import { useWallet } from "@solana/wallet-adapter-react";
-import NetworkSwitcher from "@/app/components/NetworkSwitcher";
+import NetworkSwitcher from "@/components/NetworkSwitcher";
 import { useSupabaseSession } from "@/contexts/SupabaseSessionContext";
-import WalletInfoModal from "@/app/components/modals/WalletInfoModal";
+import WalletInfoModal from "@/components/modals/WalletInfoModal";
 import Image from "next/image";
-import { Button } from "@/app/components/Button";
+import { Button } from "@/components/Button";
 
 const walletIconMap: Record<string, string> = {
   "MetaMask": "/images/icon/metamask.png",

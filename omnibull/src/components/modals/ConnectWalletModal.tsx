@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Info, X, ArrowLeft } from "lucide-react";
-import IconButton from "@/app/components/IconButton";
-import { Button } from "@/app/components/Button";
-import EvmConnectPanel from "@/app/components/wallets/EVMConnectPanel";
-import SolanaConnectPanel from "@/app/components/wallets/SolanaConnectPanel";
+import IconButton from "@/components/IconButton";
+import { Button } from "@/components/Button";
+import EvmConnectPanel from "@/components/wallets/EVMConnectPanel";
+import SolanaConnectPanel from "@/components/wallets/SolanaConnectPanel";
 
 interface ConnectWalletModalProps {
   isOpen: boolean;

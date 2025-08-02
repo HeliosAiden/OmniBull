@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-const Header = dynamic(() => import("@/app/components/Header"), { ssr: false });
+const Header = dynamic(() => import("@/components/Header"), { ssr: false });
 
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
   return (

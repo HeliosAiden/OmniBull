@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import clsx from "clsx";
 
-import IconButton from "@/app/components/IconButton";
+import IconButton from "@/components/IconButton";
 
 type SnackbarProps = {
   open: boolean;

@@ -1,7 +1,7 @@
 "use client";
 
-import Header from "@/app/components/Header";
-import Sidebar from "@/app/components/SideBar";
+import Header from "@/components/Header";
+import Sidebar from "@/components/SideBar";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (

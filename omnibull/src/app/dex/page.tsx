@@ -1,6 +1,6 @@
 'use client';
 
-import WalletViewer from '@/app/components/pages/dex/WalletViewer'
+import WalletViewer from '@/components/pages/dex/WalletViewer'
 
 export default function DexPage() {
   

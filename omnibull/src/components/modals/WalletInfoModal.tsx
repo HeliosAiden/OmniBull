@@ -3,9 +3,9 @@
 import { Dialog } from "@headlessui/react";
 import { X, Check, LogOut, Copy } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Button } from "@/app/components/Button";
-import IconButton from "@/app/components/IconButton";
-import Snackbar from "@/app/components/Snackbar";
+import { Button } from "@/components/Button";
+import IconButton from "@/components/IconButton";
+import Snackbar from "@/components/Snackbar";
 
 interface WalletInfoModalProps {
   isOpen: boolean;
