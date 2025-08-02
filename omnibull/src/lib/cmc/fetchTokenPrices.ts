@@ -7,9 +7,7 @@ export async function fetchCmcPrices(symbols: string[]) {
     body: JSON.stringify({ symbols }),
   });
 
-  console.log(res)
-
-  if (!res.ok) throw new Error("Failed to fetch CoinMarketCap prices");
+  if (!res.ok) return;
 
   return res.json();
 }

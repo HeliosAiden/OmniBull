@@ -7,22 +7,28 @@ import Table from '@/components/Table';
 import Image from 'next/image';
 import { getTokenLogoURL } from '@/utils/getTokenLogo';
 import { Token } from '@/types/token';
-import { formatPriceCMCStyle } from '@/utils/formatTokenPrice'
 
 export default function TokenHoldingsView({ address, chainKey }: { address: string, chainKey: string }) {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(false);
+
+  console.log('address')
+  console.log(address)
+  console.log('chainKey')
+  console.log(chainKey)
 
   useEffect(() => {
     const loadHoldingsWithPrices = async () => {
       try {
         setLoading(true);
 
+        if (!address || !chainKey) return
+
         // 1. Fetch token holdings
         const holdings = await fetchTokenHoldings(address, chainKey);
 
         // 2. Extract unique token symbols
-        const uniqueSymbols = [...new Set(holdings.map(t => t.symbol.toUpperCase()))];
+        const uniqueSymbols = [...new Set(holdings.map(t => t.symbol))];
 
         // 3. Fetch prices from CoinMarketCap
         const cmcData = await fetchCmcPrices(uniqueSymbols);
@@ -50,7 +56,6 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
         setLoading(false);
       }
     };
-
     loadHoldingsWithPrices();
   }, [address, chainKey]);
 

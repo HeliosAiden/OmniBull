@@ -72,6 +72,14 @@ export const TOKEN_TICKER_URL_MAP: Record<string, string> = {
   "EIGEN": "/images/icon/token/L2/eigenlayer.png",
   "LINEA": "/images/icon/token/L2/linea.png",
   "OP": "/images/icon/token/L2/optimism.png",
+  "stETH": "/images/icon/token/erc-20/staked-ether.png",
+  "STETH": "/images/icon/token/erc-20/staked-ether.png",
+  "cbETH": "/images/icon/token/erc-20/coinbase-wrapped-staked-eth.png",
+  "CBETH": "/images/icon/token/erc-20/coinbase-wrapped-staked-eth.png",
+  "NEIRO": "/images/icon/token/meme/neiro-4.png",
+  "USDc": "/images/icon/token/stablecoin/usd-coin.png",
+  "AEVO": "/images/icon/token/L1/aevo-exchange.png",
+  "WETH": "/images/icon/token/erc-20/l2-standard-bridged-weth-base.png"
 };
 
 export const CMC_SYMBOLS = [
