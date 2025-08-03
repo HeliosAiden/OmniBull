@@ -1,11 +1,13 @@
-"use client"
+'use client';
 
+import WalletViewer from '@/components/pages/dex/WalletViewer'
 
-export default function DEXPage() {
+export default function DexPage() {
+  
 
   return (
-    <div className="p-10 text-white bg-black h-screen">
-      This is Dex page
+    <div className="p-6 mx-auto">
+      <WalletViewer />
     </div>
-  )
+  );
 }

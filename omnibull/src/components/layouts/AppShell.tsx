@@ -1,0 +1,18 @@
+"use client";
+
+import Header from "@/components/Header";
+import Sidebar from "@/components/SideBar";
+
+export default function AppShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <div className="flex flex-1">
+        <Sidebar />
+        <main className="flex-1 p-6 bg-white dark:bg-[#0a0a0a] overflow-y-auto">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}

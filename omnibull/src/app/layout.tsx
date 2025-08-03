@@ -7,7 +7,7 @@ import { SolanaProvider } from "@/lib/chains/solana";
 import { EVMProvider } from "@/lib/chains/evm";
 
 import { SideBarProvider } from "@/contexts/SideBarContext";
-import LayoutRouter from "@/app/components/layouts/LayoutRouter";
+import LayoutRouter from "@/components/layouts/LayoutRouter";
 
 import { SupabaseSessionProvider } from "@/contexts/SupabaseSessionContext";
 
