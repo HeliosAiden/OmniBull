@@ -19,11 +19,13 @@ export default function WalletViewer() {
   const [selectedChain, setSelectedChain] = useState<string>(defaultChain || 'eth');
   const [viewAddress, setViewAddress] = useState<string | null>(defaultAddress || null);
   const [chainKey, setChainKey] = useState<keyof typeof SUPPORTED_CHAINS>('eth');
+  const [viewWallet, setViewWallet] = useState(0);
 
   const handleView = () => {
     if (inputAddress) {
       setViewAddress(inputAddress);
       setChainKey(selectedChain as keyof typeof SUPPORTED_CHAINS);
+      setViewWallet(prev => prev + 1)
     }
   };
 
@@ -51,7 +53,7 @@ export default function WalletViewer() {
       </div>
 
       {viewAddress ? (
-        <TokenHoldingsView address={viewAddress} chainKey={chainKey} />
+        <TokenHoldingsView address={viewAddress} chainKey={chainKey} viewWallet={viewWallet} />
       ) : (
         <p className="text-gray-500">Connect your wallet or paste an address above.</p>
       )}

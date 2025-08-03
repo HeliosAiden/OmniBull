@@ -1,16 +1,35 @@
 export const PROJECT_ID:string = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? ''
 export const MORALIS_API_KEY:string = process.env.NEXT_PUBLIC_MORALIS_API_KEY ?? ''
 export const CMC_API_KEY:string = process.env.NEXT_PUBLIC_CMC_API_KEY ?? ''
+export const BIRD_EYE_API_KEY:string = process.env.NEXT_PUBLIC_BIRD_EYE_API_KEY ?? ''
+
+export const SOLANA_CHAIN_KEY = 'sol'
+export const BITCOIN_CHAIN_KEY = 'btc'
+export const ETHEREUM_CHAIN_KEY = 'eth'
+export const BSC_CHAIN_KEY = 'bnb'
+export const TRON_CHAIN_KEY = 'trx'
+export const ARBITRUM_ONE_CHAIN_KEY = 'arb'
+export const AVALANCHE_CHAIN_KEY = 'avax'
+export const POLYGON_CHAIN_KEY = 'matic'
 
 export const SUPPORTED_CHAINS = {
   btc: 'Bitcoin',
   eth: 'Ethereum',
   sol: 'Solana',
-  bsc: 'BNB chain',
-  tron: 'Tron',
-  arbitrum: 'Arbitrum',
-  avalanche: 'Avalanche',
-  polygon: 'Polygon',
+  bsc: 'BSC chain',
+  trx: 'Tron',
+  arb: 'Arbitrum',
+  avax: 'Avalanche',
+  matic: 'Polygon'
+};
+
+export const CHAIN_MAP: Record<string, string> = {
+  eth: '0x1',
+  matic: '0x89',
+  bsc: '0x38',
+  avax: '0xa86a',
+  arb: '0xa4b1',
+  sol: 'solana',
 };
 
 export const CHAIN_TICKER = {
@@ -18,10 +37,10 @@ export const CHAIN_TICKER = {
     eth: 'ETH',
     sol: 'SOL',
     bsc: 'BNB',
-    tron: 'TRX',
-    arbitrum: 'ARB',
-    avalanche: 'AVAX',
-    polygon: 'MATIC',
+    trx: 'TRX',
+    arb: 'ARB',
+    avax: 'AVAX',
+    matic: 'MATIC',
 }
 
 export const TOKEN_TICKER_URL_MAP: Record<string, string> = {
@@ -81,7 +100,9 @@ export const TOKEN_TICKER_URL_MAP: Record<string, string> = {
   "AEVO": "/images/icon/token/L1/aevo-exchange.png",
   "WETH": "/images/icon/token/erc-20/l2-standard-bridged-weth-base.png",
   "TOSHI": "/images/icon/token/meme/toshi.png",
-  "REKT": "/images/icon/token/meme/rekt-4.png"
+  "REKT": "/images/icon/token/meme/rekt-4.png",
+  "TRB": "/images/icon/token/L1/tellor.png",
+  "PENDLE": "/images/icon/token/L1/pendle.png"
 };
 
 export const CMC_SYMBOLS = [

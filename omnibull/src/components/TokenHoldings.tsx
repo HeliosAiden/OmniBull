@@ -3,25 +3,55 @@
 import { useEffect, useState } from 'react';
 import { fetchTokenHoldings } from '@/utils/fetchTokenHoldings';
 import { fetchCmcPrices } from '@/lib/cmc/fetchTokenPrices';
+import { fetchSolanaPrices } from '@/lib/birdeye/fetchSolanaPrices';
 import Table from '@/components/Table';
 import Image from 'next/image';
 import { getTokenLogoURL } from '@/utils/getTokenLogo';
 import { Token } from '@/types/token';
+import { SOLANA_CHAIN_KEY } from '@/constants';
+import Snackbar from '@/components/Snackbar';
+import { X } from 'lucide-react';
 
-export default function TokenHoldingsView({ address, chainKey }: { address: string, chainKey: string }) {
+
+export default function TokenHoldingsView({ address, chainKey, viewWallet }: { address: string, chainKey: string, viewWallet: number }) {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
-  useEffect(() => {
-    const loadHoldingsWithPrices = async () => {
-      try {
-        setLoading(true);
+  const loadHoldingsWithPrices = async () => {
+    try {
+      setLoading(true);
 
-        if (!address || !chainKey) return;
+      if (!address || !chainKey) return;
 
-        // 1. Fetch token holdings
-        const holdings = await fetchTokenHoldings(address, chainKey);
+      // 1. Fetch token holdings
+      const holdings = await fetchTokenHoldings(address, chainKey);
 
+      if (chainKey == SOLANA_CHAIN_KEY) {
+        const mints = holdings.map(holding => holding.mint);
+        const priceMap = await fetchSolanaPrices(mints);
+
+        const enriched = holdings
+          .map((token) => {
+            const price = priceMap[token.mint]?.price
+
+            if (!price) return null;
+
+            return {
+              ...token,
+              price,
+              balance: token.balance,
+              decimals: token.decimals,
+              name: token.name,
+              symbol: token.symbol,
+            };
+          })
+          .filter((t): t is NonNullable<typeof t> => t !== null); // Remove nulls
+
+        setTokens(enriched);
+
+      } else {
         // 2. Extract unique token symbols
         const uniqueSymbols = [...new Set(holdings.map((t) => t.symbol))];
 
@@ -49,15 +79,22 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
           .filter((t): t is NonNullable<typeof t> => t !== null); // Remove nulls
 
         setTokens(enriched);
-      } catch (err) {
-        console.error('Failed to load token prices:', err);
-      } finally {
-        setLoading(false);
       }
-    };
 
+      
+    } catch (err:any) {
+      console.error('Failed to load token prices:', err);
+      setOpenSnackbar(true)
+      setErrorMsg(err)
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     loadHoldingsWithPrices();
-  }, [address, chainKey]);
+  }, [address, chainKey, viewWallet]);
 
 
   return (
@@ -72,17 +109,17 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
             {
               key: 'symbol',
               label: 'Asset',
-              render: (_, row) => (
+              render: (val, row) => (
                 <div className="flex items-center gap-2">
                   <Image
-                    src={getTokenLogoURL(row.symbol)}
+                    src={getTokenLogoURL(val)}
                     width={20}
                     height={20}
-                    alt={row.symbol}
+                    alt={val}
                     className="rounded-full"
                   />
                   <div className="flex flex-col">
-                    <span className="text-white font-medium">{row.symbol}</span>
+                    <span className="text-white font-medium">{val}</span>
                     <span className="text-xs text-gray-400">{row.name}</span>
                   </div>
                 </div>
@@ -98,7 +135,7 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
                   : '-',
             },
             {
-              key: 'balance',
+              key: 'amount',
               label: 'Holdings',
               align: 'right',
               render: (val, row) => {
@@ -109,7 +146,7 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
               },
             },
             {
-              key: 'balance',
+              key: 'amount',
               label: 'Value',
               align: 'right',
               render: (val, row) => {
@@ -128,6 +165,14 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
           rowsPerPage={5}
         />
       )}
+      {/* Snackbar */}
+      <Snackbar
+        open={openSnackbar}
+        onClose={() => setOpenSnackbar(false)}
+        message={errorMsg}
+        icon={<X className="w-4 h-4 text-red-400" />}
+        position="top-right"
+      />
     </div>
   );
 }

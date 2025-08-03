@@ -1,30 +1,38 @@
 import Moralis from 'moralis';
 import { initMoralis } from '@/lib/moralis';
-
+import { CHAIN_MAP, SOLANA_CHAIN_KEY } from '@/constants'
 import { filterValidAndSafeTokens } from '@/utils/validateToken'
 
-const CHAIN_MAP: Record<string, string> = {
-  eth: '0x1',
-  polygon: '0x89',
-  bsc: '0x38',
-  avalanche: '0xa86a',
-  arbitrum: '0xa4b1',
-};
-
 export async function fetchTokenHoldings(address: string, chainKey: string = 'eth') {
-  await initMoralis();
+  try {
+    await initMoralis();
 
-  const chain = CHAIN_MAP[chainKey];
+    const chain = CHAIN_MAP[chainKey];
 
-  if (!chain) {
-    throw new Error(`Unsupported chain: ${chainKey}`);
+    if (chainKey === SOLANA_CHAIN_KEY) {
+      try {
+        const response = await Moralis.SolApi.account.getSPL({ address });
+        return filterValidAndSafeTokens(response.toJSON());
+      } catch (solanaError: any) {
+        throw new Error(`Failed to fetch Solana token balances: ${solanaError.message}`);
+      }
+    }
+
+    // EVM path
+    try {
+      const response = await Moralis.EvmApi.token.getWalletTokenBalances({
+        address,
+        chain,
+      });
+
+      return filterValidAndSafeTokens(response.toJSON());
+    } catch (evmError: any) {
+      throw new Error(`Failed to fetch EVM token balances: ${evmError.message}`);
+    }
+
+  } catch (error: any) {
+    console.error('fetchTokenHoldings error:', error);
+    throw new Error(`Could not fetch token holdings: ${error.message}`);
   }
-
-  const response = await Moralis.EvmApi.token.getWalletTokenBalances({
-    address,
-    chain,
-  });
-
-  return filterValidAndSafeTokens(response.toJSON());
-
 }
+

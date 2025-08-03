@@ -5,4 +5,5 @@ export type Token = {
   decimals: number;
   price?: number;
   logo?: string;
+  amount?: string
 };
