@@ -12,42 +12,41 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(false);
 
-  console.log('address')
-  console.log(address)
-  console.log('chainKey')
-  console.log(chainKey)
-
   useEffect(() => {
     const loadHoldingsWithPrices = async () => {
       try {
         setLoading(true);
 
-        if (!address || !chainKey) return
+        if (!address || !chainKey) return;
 
         // 1. Fetch token holdings
         const holdings = await fetchTokenHoldings(address, chainKey);
 
         // 2. Extract unique token symbols
-        const uniqueSymbols = [...new Set(holdings.map(t => t.symbol))];
+        const uniqueSymbols = [...new Set(holdings.map((t) => t.symbol))];
 
         // 3. Fetch prices from CoinMarketCap
         const cmcData = await fetchCmcPrices(uniqueSymbols);
 
-        // 4. Merge prices into tokens
-        const enriched = holdings.map((token) => {
-          const symbol = token.symbol.toUpperCase();
-          const cmcInfo = cmcData[symbol]?.quote?.USD;
-          const price = typeof cmcInfo?.price === 'number' ? cmcInfo.price : undefined;
-          return {
-            ...token,
-            price,
-            // Ensure all Token properties are present
-            balance: token.balance,
-            decimals: token.decimals,
-            name: token.name,
-            symbol: token.symbol,
-          };
-        });
+        // 4. Merge prices into tokens, but only include if CMC price exists
+        const enriched = holdings
+          .map((token) => {
+            const symbol = token.symbol.toUpperCase();
+            const cmcInfo = cmcData[symbol]?.quote?.USD;
+            const price = typeof cmcInfo?.price === 'number' ? cmcInfo.price : undefined;
+
+            if (price === undefined) return null; // Mark for removal
+
+            return {
+              ...token,
+              price,
+              balance: token.balance,
+              decimals: token.decimals,
+              name: token.name,
+              symbol: token.symbol,
+            };
+          })
+          .filter((t): t is NonNullable<typeof t> => t !== null); // Remove nulls
 
         setTokens(enriched);
       } catch (err) {
@@ -56,8 +55,10 @@ export default function TokenHoldingsView({ address, chainKey }: { address: stri
         setLoading(false);
       }
     };
+
     loadHoldingsWithPrices();
   }, [address, chainKey]);
+
 
   return (
     <div className="p-4 space-y-4">

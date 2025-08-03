@@ -7,7 +7,7 @@ export const SUPPORTED_CHAINS = {
   eth: 'Ethereum',
   sol: 'Solana',
   bsc: 'BNB chain',
-  tron: 'Rron',
+  tron: 'Tron',
   arbitrum: 'Arbitrum',
   avalanche: 'Avalanche',
   polygon: 'Polygon',
@@ -79,7 +79,9 @@ export const TOKEN_TICKER_URL_MAP: Record<string, string> = {
   "NEIRO": "/images/icon/token/meme/neiro-4.png",
   "USDc": "/images/icon/token/stablecoin/usd-coin.png",
   "AEVO": "/images/icon/token/L1/aevo-exchange.png",
-  "WETH": "/images/icon/token/erc-20/l2-standard-bridged-weth-base.png"
+  "WETH": "/images/icon/token/erc-20/l2-standard-bridged-weth-base.png",
+  "TOSHI": "/images/icon/token/meme/toshi.png",
+  "REKT": "/images/icon/token/meme/rekt-4.png"
 };
 
 export const CMC_SYMBOLS = [
