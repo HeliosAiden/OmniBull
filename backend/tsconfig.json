@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",                         // Modern JS output
+    "module": "NodeNext",                       // Use ESModules
+    "moduleResolution": "NodeNext",             // Required for module imports
+    "esModuleInterop": true,                    // Allow CommonJS-style imports
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "resolveJsonModule": true,                  // Enable JSON imports
+    "outDir": "dist",                           // Where compiled JS goes (if using `tsc`)
+    "rootDir": ".",                             // Treat current folder as root
+    "allowSyntheticDefaultImports": true,       // Required for `import express from 'express'`
+    "types": ["node"],                          // TypeScript type defs for Node.js
+    "noImplicitAny": false                      // Optional: Turn off if you prefer
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
