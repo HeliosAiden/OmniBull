@@ -1,4 +1,3 @@
-// src/routes/user.routes.ts
 import express from 'express'
 import {
   getCurrentUser,
@@ -9,8 +8,50 @@ import { authMiddleware } from '../middleware/auth.middleware'
 
 const router = express.Router()
 
+/**
+ * @swagger
+ * /api/user/current:
+ *   get:
+ *     summary: Get the current user
+ *     tags:
+ *       - Users
+ *     responses:
+ *       200:
+ *         description: The current user
+ */
 router.get('/user/current', authMiddleware, getCurrentUser)
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get all users
+ *     tags:
+ *       - Users
+ *     responses:
+ *       200:
+ *         description: A list of users
+ */
 router.get('/users', authMiddleware, listUsers)
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   get:
+ *     summary: Get a user by ID
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A single user
+ */
 router.get('/users/:id', authMiddleware, getUserById)
+
 
 export default router
