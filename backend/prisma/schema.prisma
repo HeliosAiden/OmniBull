@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String        @id @default(uuid())
+  email      String        @unique
+  password   String
+  role       String        @default("user")
+  wallets    Wallet[]
+  cexAccounts CexAccount[]
+  createdAt  DateTime      @default(now())
+}
+
+model Wallet {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  address   String
+  chain     String
+  label     String?
+  createdAt DateTime @default(now())
+
+  @@unique([address, chain])
+}
+
+model CexAccount {
+  id         String    @id @default(uuid())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  exchange   Exchange  @relation(fields: [exchangeId], references: [id])
+  exchangeId String
+  apiKey     String
+  apiSecret  String
+  accountId  String?
+  label      String?
+  encrypted  Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+
+  @@unique([userId, exchangeId, apiKey])
+}
+
+
+model Exchange {
+  id        String        @id @default(cuid())
+  name      String        @unique // e.g., "binance"
+  label     String
+  accounts  CexAccount[]
+}
+

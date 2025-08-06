@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "esnext",                         
+    "module": "nodenext",                      
+    "moduleResolution": "nodenext",             
+    "esModuleInterop": true,                    
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "resolveJsonModule": true,                  
+    "outDir": "dist",                           
+    "rootDir": ".",                             
+    "allowSyntheticDefaultImports": true,       
+    "types": ["node"],                          
+    "noImplicitAny": false                      
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
