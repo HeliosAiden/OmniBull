@@ -19,7 +19,7 @@ const router = express.Router()
  *       200:
  *         description: The current user
  */
-router.get('/user/current', authMiddleware, getCurrentUser)
+router.get('/current', authMiddleware, getCurrentUser)
 
 /**
  * @swagger
@@ -32,7 +32,7 @@ router.get('/user/current', authMiddleware, getCurrentUser)
  *       200:
  *         description: A list of users
  */
-router.get('/users', authMiddleware, listUsers)
+router.get('/', authMiddleware, listUsers)
 
 /**
  * @swagger
@@ -51,7 +51,7 @@ router.get('/users', authMiddleware, listUsers)
  *       200:
  *         description: A single user
  */
-router.get('/users/:id', authMiddleware, getUserById)
+router.get('/:id', authMiddleware, getUserById)
 
 
 export default router
