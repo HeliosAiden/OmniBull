@@ -5,6 +5,7 @@ import authRoutes from './routes/auth.routes';
 import { addCexAccount } from './controllers/cex.controller'
 import { authMiddleware } from './middleware/auth.middleware'
 import userRoutes from './routes/user.routes'
+import { BACKEND_PORT } from './constants'
 
 
 dotenv.config();
@@ -24,6 +25,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (_req, res) => res.send('🚀 OmniBull Backend running'));
 
-app.listen(process.env.PORT, () => {
-  console.log(`✅ Backend ready at http://localhost:${process.env.PORT}`);
+app.listen(BACKEND_PORT, () => {
+  console.log(`✅ Backend ready at http://localhost:${BACKEND_PORT}`);
 });
