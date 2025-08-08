@@ -19,7 +19,7 @@ app.use(express.json());
 // Setup swagger api
 app.use('/api/auth', authRoutes); // 👈 Mount auth routes
 
-app.use('/api/cex', cexRoutes)
+app.use('/api/exchanges', cexRoutes)
 
 app.use('/api/cex-account', cexAccountRoutes)
 
