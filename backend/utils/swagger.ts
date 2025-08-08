@@ -9,6 +9,20 @@ const options: swaggerJsdoc.Options = {
       title: 'Omni Bull backend',
       version: '1.0.0',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT", // Optional, can be "JWT" or "OAuth"
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   apis: ['./routes/*.ts', './index.ts'], // Path to your route files with JSDoc comments
 }

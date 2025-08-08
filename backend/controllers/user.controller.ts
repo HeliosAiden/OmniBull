@@ -1,9 +1,7 @@
 // src/controllers/user.controller.ts
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
 import { AuthRequest } from '../middleware/auth.middleware'
-
-const prisma = new PrismaClient()
+import { prisma } from '../utils/prisma';
 
 // 🟢 GET /api/users
 export const listUsers = async (_req: Request, res: Response) => {

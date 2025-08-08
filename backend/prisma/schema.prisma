@@ -30,26 +30,38 @@ model Wallet {
 }
 
 model CexAccount {
-  id         String    @id @default(uuid())
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
-  exchange   Exchange  @relation(fields: [exchangeId], references: [id])
-  exchangeId String
-  apiKey     String
-  apiSecret  String
-  accountId  String?
-  label      String?
-  encrypted  Boolean   @default(false)
-  createdAt  DateTime  @default(now())
+  id          String    @id @default(uuid())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  label       String?
+
+  exchange    Exchange? @relation(fields: [exchangeId], references: [id], onDelete: SetNull)
+  exchangeId  String?   // Nullable so old accounts can remain even if Exchange is deleted
+
+  apiKey      String
+  apiSecret   String?   // Optional for read-only or external vault
+  accountId   String?
+  encrypted   Boolean   @default(false)
+  permissions String?   // e.g., "read-only"
+  status      String    @default("active") // "active", "revoked", etc.
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now())
 
   @@unique([userId, exchangeId, apiKey])
 }
+
 
 
 model Exchange {
   id        String        @id @default(cuid())
   name      String        @unique // e.g., "binance"
   label     String
+  status    String        @default("active") // "active", "inactive"
+  immutable Boolean       @default(true) // Prevent edits/deletes in normal flows
   accounts  CexAccount[]
+
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt @default(now())
 }
 

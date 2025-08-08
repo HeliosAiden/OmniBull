@@ -1,88 +1,114 @@
-// src/controllersapi/cex.controller.ts
-import { PrismaClient } from '@prisma/client'
-import { encrypt } from '../utils/encryption'
+import { Request, Response } from 'express'
+import { prisma } from '../utils/prisma';
 
-const prisma = new PrismaClient()
+/**
+ * CREATE - Add a new Exchange
+ */
+export const addExchange = async (req: Request, res: Response) => {
+  try {
+    const { name, label } = req.body
 
-export const addCexAccount = async (req, res) => {
-  const userId = req.user.id
-  const { exchangeName, apiKey, apiSecret, label } = req.body
-
-  const exchange = await prisma.exchange.upsert({
-    where: { name: exchangeName },
-    update: {},
-    create: { name: exchangeName, label: exchangeName }
-  })
-
-  const encryptedKey = encrypt(apiKey)
-  const encryptedSecret = encrypt(apiSecret)
-
-  const cexAccount = await prisma.cexAccount.create({
-    data: {
-      userId,
-      exchangeId: exchange.id,
-      apiKey: encryptedKey,
-      apiSecret: encryptedSecret,
-      encrypted: true,
-      label
+    if (!name || !label) {
+      return res.status(400).json({ error: 'name and label are required' })
     }
-  })
 
-  res.json({ message: 'CEX account added', account: cexAccount })
+    const existing = await prisma.exchange.findUnique({ where: { name } })
+    if (existing) {
+      return res.status(409).json({ error: 'Exchange with this name already exists' })
+    }
+
+    const exchange = await prisma.exchange.create({
+      data: { name, label }
+    })
+
+    res.status(201).json({ exchange })
+  } catch (err) {
+    console.error('Add Exchange Error:', err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
 }
 
-export const getCexAccounts = async (req, res) => {
-  const userId = req.user.id
-  const accounts = await prisma.cexAccount.findMany({
-    where: { userId },
-    include: { exchange: true }
-  })
-  res.json(accounts)
+/**
+ * READ ALL - Get all Exchanges
+ */
+export const getExchanges = async (_req: Request, res: Response) => {
+  try {
+    const exchanges = await prisma.exchange.findMany({
+      include: { accounts: true } // if you want to fetch linked CexAccounts
+    })
+
+    res.json({ exchanges })
+  } catch (err) {
+    console.error('Get Exchanges Error:', err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
 }
 
-export const getCexAccountById = async (req, res) => {
-  const userId = req.user.id
-  const { id } = req.params
+/**
+ * READ ONE - Get Exchange by ID
+ */
+export const getExchangeById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
 
-  const account = await prisma.cexAccount.findFirst({
-    where: { id, userId },
-    include: { exchange: true }
-  })
+    const exchange = await prisma.exchange.findUnique({
+      where: { id },
+      include: { accounts: true }
+    })
 
-  if (!account) return res.status(404).json({ message: 'Not found' })
+    if (!exchange) {
+      return res.status(404).json({ error: 'Exchange not found' })
+    }
 
-  res.json(account)
+    res.json({ exchange })
+  } catch (err) {
+    console.error('Get Exchange By ID Error:', err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
 }
 
-export const updateCexAccount = async (req, res) => {
-  const userId = req.user.id
-  const { id } = req.params
-  const { label, apiKey, apiSecret } = req.body
+/**
+ * UPDATE - Update an Exchange
+ */
+export const updateExchange = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const { name, label } = req.body
 
-  const existing = await prisma.cexAccount.findFirst({ where: { id, userId } })
-  if (!existing) return res.status(404).json({ message: 'Not found' })
+    const existing = await prisma.exchange.findUnique({ where: { id } })
+    if (!existing) {
+      return res.status(404).json({ error: 'Exchange not found' })
+    }
 
-  const dataToUpdate: any = {}
-  if (label) dataToUpdate.label = label
-  if (apiKey) dataToUpdate.apiKey = encrypt(apiKey)
-  if (apiSecret) dataToUpdate.apiSecret = encrypt(apiSecret)
+    const updated = await prisma.exchange.update({
+      where: { id },
+      data: { name, label }
+    })
 
-  const updated = await prisma.cexAccount.update({
-    where: { id },
-    data: dataToUpdate
-  })
-
-  res.json({ message: 'Updated', account: updated })
+    res.json({ exchange: updated })
+  } catch (err) {
+    console.error('Update Exchange Error:', err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
 }
 
-export const deleteCexAccount = async (req, res) => {
-  const userId = req.user.id
-  const { id } = req.params
+/**
+ * DELETE - Remove an Exchange
+ */
+export const deleteExchange = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
 
-  const existing = await prisma.cexAccount.findFirst({ where: { id, userId } })
-  if (!existing) return res.status(404).json({ message: 'Not found' })
+    const existing = await prisma.exchange.findUnique({ where: { id } })
+    if (!existing) {
+      return res.status(404).json({ error: 'Exchange not found' })
+    }
 
-  await prisma.cexAccount.delete({ where: { id } })
+    await prisma.exchange.delete({ where: { id } })
 
-  res.json({ message: 'Deleted' })
+    res.json({ message: 'Exchange deleted successfully' })
+  } catch (err) {
+    console.error('Delete Exchange Error:', err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
 }

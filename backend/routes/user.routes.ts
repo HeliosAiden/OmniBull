@@ -10,7 +10,7 @@ const router = express.Router()
 
 /**
  * @swagger
- * /api/user/current:
+ * /api/users/current:
  *   get:
  *     summary: Get the current user
  *     tags:

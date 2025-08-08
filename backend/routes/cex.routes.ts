@@ -1,23 +1,32 @@
-// src/routes/cex.routes.ts
-import { Router } from 'express'
+// src/routes/exchange.routes.ts
+import { Router } from 'express';
 import {
-  addCexAccount,
-  getCexAccounts,
-  getCexAccountById,
-  updateCexAccount,
-  deleteCexAccount
-} from '../controllers/cex.controller'
-import { authMiddleware } from '../middleware/auth.middleware'
+  addExchange,
+  getExchanges,
+  getExchangeById,
+  updateExchange,
+  deleteExchange
+} from '../controllers/cex.controller';
+import { authMiddleware } from '../middleware/auth.middleware';
+import { adminMiddleware } from '../middleware/admin.middleware';
 
-const router = Router()
+const router = Router();
 
-// CREATE
 /**
  * @swagger
- * /api/cex/add:
+ * tags:
+ *   name: Exchanges
+ *   description: Manage Centralized Exchange (CEX) definitions
+ */
+
+/**
+ * @swagger
+ * /api/exchanges/add:
  *   post:
- *     summary: Add a new CEX account
- *     tags: [CEX Accounts]
+ *     summary: Add a new Exchange (Admin only)
+ *     tags: [Exchanges]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -25,45 +34,49 @@ const router = Router()
  *           schema:
  *             type: object
  *             required:
- *               - exchangeName
- *               - apiKey
- *               - apiSecret
+ *               - name
  *               - label
  *             properties:
- *               exchangeName:
+ *               name:
  *                 type: string
- *               apiKey:
- *                 type: string
- *               apiSecret:
- *                 type: string
+ *                 example: binance
  *               label:
  *                 type: string
+ *                 example: Binance Main
  *     responses:
- *       200:
- *         description: CEX account added
+ *       201:
+ *         description: Exchange added successfully
+ *       400:
+ *         description: Missing required fields
+ *       409:
+ *         description: Exchange already exists
+ *       403:
+ *         description: Forbidden
  */
-router.post('/add', authMiddleware, addCexAccount)
+router.post('/add', authMiddleware, adminMiddleware, addExchange);
 
-// READ ALL
 /**
  * @swagger
- * /api/cex:
+ * /api/exchanges:
  *   get:
- *     summary: Get all CEX accounts for the current user
- *     tags: [CEX Accounts]
+ *     summary: Get all Exchanges
+ *     tags: [Exchanges]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of CEX accounts
+ *         description: List of exchanges
  */
-router.get('/', authMiddleware, getCexAccounts)
+router.get('/', authMiddleware, getExchanges);
 
-// READ ONE
 /**
  * @swagger
- * /api/cex/{id}:
+ * /api/exchanges/{id}:
  *   get:
- *     summary: Get a single CEX account by ID
- *     tags: [CEX Accounts]
+ *     summary: Get an Exchange by ID
+ *     tags: [Exchanges]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -72,19 +85,20 @@ router.get('/', authMiddleware, getCexAccounts)
  *           type: string
  *     responses:
  *       200:
- *         description: A single CEX account
+ *         description: Exchange found
  *       404:
- *         description: Not found
+ *         description: Exchange not found
  */
-router.get('/:id', authMiddleware, getCexAccountById)
+router.get('/:id', authMiddleware, getExchangeById);
 
-// UPDATE
 /**
  * @swagger
- * /api/cex/{id}:
+ * /api/exchanges/{id}:
  *   put:
- *     summary: Update a CEX account
- *     tags: [CEX Accounts]
+ *     summary: Update an Exchange (Admin only)
+ *     tags: [Exchanges]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -98,27 +112,28 @@ router.get('/:id', authMiddleware, getCexAccountById)
  *           schema:
  *             type: object
  *             properties:
+ *               name:
+ *                 type: string
  *               label:
- *                 type: string
- *               apiKey:
- *                 type: string
- *               apiSecret:
  *                 type: string
  *     responses:
  *       200:
- *         description: Updated account
+ *         description: Exchange updated
  *       404:
- *         description: Not found
+ *         description: Exchange not found
+ *       403:
+ *         description: Forbidden
  */
-router.put('/:id', authMiddleware, updateCexAccount)
+router.put('/:id', authMiddleware, adminMiddleware, updateExchange);
 
-// DELETE
 /**
  * @swagger
- * api/cex/{id}:
+ * /api/exchanges/{id}:
  *   delete:
- *     summary: Delete a CEX account
- *     tags: [CEX Accounts]
+ *     summary: Delete an Exchange (Admin only)
+ *     tags: [Exchanges]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -127,10 +142,12 @@ router.put('/:id', authMiddleware, updateCexAccount)
  *           type: string
  *     responses:
  *       200:
- *         description: Deleted
+ *         description: Exchange deleted
  *       404:
- *         description: Not found
+ *         description: Exchange not found
+ *       403:
+ *         description: Forbidden
  */
-router.delete('/:id', authMiddleware, deleteCexAccount)
+router.delete('/:id', authMiddleware, adminMiddleware, deleteExchange);
 
-export default router
+export default router;
