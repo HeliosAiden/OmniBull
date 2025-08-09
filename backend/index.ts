@@ -8,6 +8,8 @@ import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes'
 import cexAccountRoutes from './routes/cex-account.routes'
 import cexRoutes from './routes/cex.routes'
+import exchangeRoutes from "./routes/exchange.routes";
+
 
 dotenv.config();
 const app = express();
@@ -19,11 +21,13 @@ app.use(express.json());
 // Setup swagger api
 app.use('/api/auth', authRoutes); // 👈 Mount auth routes
 
-app.use('/api/exchanges', cexRoutes)
+app.use('/api/exchange', cexRoutes) // 👈 Mount exchange manager routes
 
-app.use('/api/cex-account', cexAccountRoutes)
+app.use('/api/exchange', exchangeRoutes); // 👈 Mount exchange connection routes
 
-app.use('/api/users', userRoutes)
+app.use('/api/cex-account', cexAccountRoutes) // 👈 Mount cex-account routes
+
+app.use('/api/user', userRoutes)
 
 app.use('/', swaggerDocs.serve, swaggerDocs.setup(swaggerSpec, {
   swaggerOptions: {

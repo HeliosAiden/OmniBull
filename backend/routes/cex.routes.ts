@@ -14,17 +14,10 @@ const router = Router();
 
 /**
  * @swagger
- * tags:
- *   name: Exchanges
- *   description: Manage Centralized Exchange (CEX) definitions
- */
-
-/**
- * @swagger
- * /api/exchanges/add:
+ * /api/exchange/add:
  *   post:
  *     summary: Add a new Exchange (Admin only)
- *     tags: [Exchanges]
+ *     tags: [Exchange]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -57,10 +50,10 @@ router.post('/add', authMiddleware, adminMiddleware, addExchange);
 
 /**
  * @swagger
- * /api/exchanges:
+ * /api/exchange:
  *   get:
  *     summary: Get all Exchanges
- *     tags: [Exchanges]
+ *     tags: [Exchange]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -71,10 +64,10 @@ router.get('/', authMiddleware, getExchanges);
 
 /**
  * @swagger
- * /api/exchanges/{id}:
+ * /api/exchange/{id}:
  *   get:
  *     summary: Get an Exchange by ID
- *     tags: [Exchanges]
+ *     tags: [Exchange]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -93,10 +86,10 @@ router.get('/:id', authMiddleware, getExchangeById);
 
 /**
  * @swagger
- * /api/exchanges/{id}:
+ * /api/exchange/{id}:
  *   put:
  *     summary: Update an Exchange (Admin only)
- *     tags: [Exchanges]
+ *     tags: [Exchange]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -128,10 +121,10 @@ router.put('/:id', authMiddleware, adminMiddleware, updateExchange);
 
 /**
  * @swagger
- * /api/exchanges/{id}:
+ * /api/exchange/{id}:
  *   delete:
  *     summary: Delete an Exchange (Admin only)
- *     tags: [Exchanges]
+ *     tags: [Exchange]
  *     security:
  *       - bearerAuth: []
  *     parameters:

@@ -33,6 +33,7 @@ model CexAccount {
   id          String    @id @default(uuid())
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
+  accountId   String?
   label       String?
 
   exchange    Exchange? @relation(fields: [exchangeId], references: [id], onDelete: SetNull)
@@ -40,7 +41,8 @@ model CexAccount {
 
   apiKey      String
   apiSecret   String?   // Optional for read-only or external vault
-  accountId   String?
+  passphrase  String?   // Some exchanges like OKX & Bitget require this
+
   encrypted   Boolean   @default(false)
   permissions String?   // e.g., "read-only"
   status      String    @default("active") // "active", "revoked", etc.

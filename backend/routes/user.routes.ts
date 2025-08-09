@@ -10,7 +10,7 @@ const router = express.Router()
 
 /**
  * @swagger
- * /api/users/current:
+ * /api/user/current:
  *   get:
  *     summary: Get the current user
  *     tags:
@@ -23,7 +23,7 @@ router.get('/current', authMiddleware, getCurrentUser)
 
 /**
  * @swagger
- * /api/users:
+ * /api/user:
  *   get:
  *     summary: Get all users
  *     tags:
@@ -36,7 +36,7 @@ router.get('/', authMiddleware, listUsers)
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /api/user/{id}:
  *   get:
  *     summary: Get a user by ID
  *     tags:
