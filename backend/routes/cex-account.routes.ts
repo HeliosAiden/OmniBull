@@ -34,8 +34,13 @@ const router = Router()
  *                 type: string
  *               apiKey:
  *                 type: string
+ *                 description: The API key from the exchange
  *               apiSecret:
  *                 type: string
+ *                 description: The API secret from the exchange
+ *               passphrase:
+ *                 type: string
+ *                 description: Passphrase required for OKX/Bitget (optional for others)
  *               label:
  *                 type: string
  *     responses:

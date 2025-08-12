@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  id         String        @id @default(uuid())
-  email      String        @unique
-  password   String
-  role       String        @default("user")
-  wallets    Wallet[]
-  cexAccounts CexAccount[]
-  createdAt  DateTime      @default(now())
+  id           String        @id @default(uuid())
+  email        String        @unique
+  password     String
+  role         String        @default("user")
+  wallets      Wallet[]
+  cexAccounts  CexAccount[]
+  createdAt    DateTime      @default(now())
 }
 
 model Wallet {
@@ -25,45 +25,65 @@ model Wallet {
   chain     String
   label     String?
   createdAt DateTime @default(now())
-
   @@unique([address, chain])
+}
+
+model Exchange {
+  id        String       @id @default(cuid())
+  name      String       @unique
+  label     String
+  status    String       @default("active")
+  immutable Boolean      @default(true)
+  accounts  CexAccount[] // One-to-many with CexAccount
+  assets    Asset[]      // Exchanges can list many assets
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }
 
 model CexAccount {
   id          String    @id @default(uuid())
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
+  exchange    Exchange  @relation(fields: [exchangeId], references: [id], onDelete: Cascade)
+  exchangeId  String    // Required foreign key (no longer nullable)
   accountId   String?
   label       String?
-
-  exchange    Exchange? @relation(fields: [exchangeId], references: [id], onDelete: SetNull)
-  exchangeId  String?   // Nullable so old accounts can remain even if Exchange is deleted
-
   apiKey      String
-  apiSecret   String?   // Optional for read-only or external vault
-  passphrase  String?   // Some exchanges like OKX & Bitget require this
-
+  apiSecret   String?
+  passphrase  String?
   encrypted   Boolean   @default(false)
-  permissions String?   // e.g., "read-only"
-  status      String    @default("active") // "active", "revoked", etc.
-
+  permissions String?
+  status      String    @default("active")
+  balance     Balance?  // One-to-one relationship
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@unique([userId, exchangeId, apiKey])
 }
 
-
-
-model Exchange {
-  id        String        @id @default(cuid())
-  name      String        @unique // e.g., "binance"
-  label     String
-  status    String        @default("active") // "active", "inactive"
-  immutable Boolean       @default(true) // Prevent edits/deletes in normal flows
-  accounts  CexAccount[]
-
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt @default(now())
+model Balance {
+  id        String    @id @default(uuid())
+  account   CexAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String    @unique // Ensures one balance per account
+  assets    Asset[]   // One balance holds many assets
+  totalEqUsd Float    // Sum of all asset values in USD
+  updatedAt DateTime  @updatedAt
+  createdAt DateTime  @default(now())
 }
 
+model Asset {
+  id          String    @id @default(uuid())
+  balance     Balance   @relation(fields: [balanceId], references: [id], onDelete: Cascade)
+  balanceId   String    // Foreign key to parent Balance
+  ccy         String    // Currency code (e.g., "BTC")
+  availBal    Float     // Available balance
+  frozenBal   Float     @default(0)
+  eqUsd       Float     // USD-equivalent value
+  exchange    Exchange? @relation(fields: [exchangeId], references: [id], onDelete: SetNull)
+  exchangeId  String?   // Optional reference to exchange
+  uTime       DateTime  // Last update time from exchange
+  createdAt   DateTime  @default(now())
+
+  @@index([balanceId])
+  @@index([ccy])
+}

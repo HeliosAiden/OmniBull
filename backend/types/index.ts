@@ -8,12 +8,3 @@ declare global {
     }
   }
 }
-
-
-export type ExchangeName = "binance" | "okx" | "bybit" | "bitget" | "bingx";
-
-export type ExchangeKeys = {
-  apiKey: string;
-  secretKey: string;
-  passphrase?: string;
-};

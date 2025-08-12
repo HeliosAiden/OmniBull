@@ -25,12 +25,12 @@ const router = Router();
  *       type: object
  *       required:
  *         - apiKey
- *         - apiSecret
+ *         - secretKey
  *       properties:
  *         apiKey:
  *           type: string
  *           description: The API key from the exchange
- *         apiSecret:
+ *         secretKey:
  *           type: string
  *           description: The API secret from the exchange
  *         passphrase:

@@ -4,7 +4,7 @@ import { getOkxData } from "./exchanges/okx";
 import { getBybitData } from "./exchanges/bybit";
 import { getBitgetData } from "./exchanges/bitget";
 import { getBingxData } from "./exchanges/bingx";
-import { ExchangeKeys, ExchangeName } from "../types";
+import { ExchangeKeys, ExchangeName } from "../types/exchange";
 
 // ==============================
 // Binance

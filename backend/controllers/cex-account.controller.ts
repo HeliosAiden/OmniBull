@@ -4,7 +4,7 @@ import { prisma } from '../utils/prisma';
 
 export const addCexAccount = async (req, res) => {
   const userId = req.user.id
-  const { exchangeName, apiKey, apiSecret, label } = req.body
+  const { exchangeName, apiKey, apiSecret, label, passphrase } = req.body
 
   const exchange = await prisma.exchange.upsert({
     where: { name: exchangeName },
@@ -14,6 +14,7 @@ export const addCexAccount = async (req, res) => {
 
   const encryptedKey = encrypt(apiKey)
   const encryptedSecret = encrypt(apiSecret)
+  const encryptedPassphrase = passphrase ? encrypt(passphrase) : null
 
   const cexAccount = await prisma.cexAccount.create({
     data: {
@@ -22,6 +23,7 @@ export const addCexAccount = async (req, res) => {
       apiKey: encryptedKey,
       apiSecret: encryptedSecret,
       encrypted: true,
+      passphrase: encryptedPassphrase,
       label
     }
   })
