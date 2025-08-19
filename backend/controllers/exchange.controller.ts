@@ -16,13 +16,13 @@ async function fetchExchangeData(res: Response, exchange: ExchangeName, keys: Ex
 }
 
 export async function fetchBinanceData(req: Request, res: Response) {
-  const { keys } = req.body;
-  if (!keys) return res.status(400).json({ error: "Missing keys" });
-  return fetchExchangeData(res, "binance", keys);
+  const { apiKey, secretKey } = req.body;
+  if (!apiKey || !secretKey) return res.status(400).json({ error: "Missing keys" });
+  return fetchExchangeData(res, "binance", { apiKey, secretKey });
 }
 
 export async function fetchOKXData(req: Request, res: Response) {
-  console.log(req.body)
+
   const { apiKey, secretKey, passphrase } = req.body;
 
   if (!apiKey || !secretKey || !passphrase) {
@@ -44,7 +44,7 @@ export async function fetchBitgetData(req: Request, res: Response) {
 }
 
 export async function fetchBingXData(req: Request, res: Response) {
-  const { keys } = req.body;
-  if (!keys) return res.status(400).json({ error: "Missing keys" });
-  return fetchExchangeData(res, "bingx", keys);
+  const { apiKey, secretKey } = req.body;
+  if (!apiKey || !secretKey) return res.status(400).json({ error: "Missing keys" });
+  return fetchExchangeData(res, "bingx", { apiKey, secretKey });
 }

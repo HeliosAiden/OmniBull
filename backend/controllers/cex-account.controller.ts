@@ -57,7 +57,7 @@ export const getCexAccountById = async (req, res) => {
 export const updateCexAccount = async (req, res) => {
   const userId = req.user.id
   const { id } = req.params
-  const { label, apiKey, apiSecret } = req.body
+  const { label, apiKey, apiSecret, passPhrase } = req.body
 
   const existing = await prisma.cexAccount.findFirst({ where: { id, userId } })
   if (!existing) return res.status(404).json({ message: 'Not found' })
@@ -66,6 +66,7 @@ export const updateCexAccount = async (req, res) => {
   if (label) dataToUpdate.label = label
   if (apiKey) dataToUpdate.apiKey = encrypt(apiKey)
   if (apiSecret) dataToUpdate.apiSecret = encrypt(apiSecret)
+  if (passPhrase) dataToUpdate.passPhrase = encrypt(passPhrase)
 
   const updated = await prisma.cexAccount.update({
     where: { id },

@@ -19,8 +19,8 @@ export async function getBingxData({
   apiKey: string;
   secretKey: string;
 }) {
-  const timestamp = Date.now();
-  const params = { timestamp };
+  const timeStamp = new Date().getTime()
+  const params = { timeStamp: timeStamp };
 
   const signature = bingxSign(secretKey, params);
 
@@ -34,7 +34,7 @@ export async function getBingxData({
     { headers }
   );
 
-  const posParams = { timestamp };
+  const posParams = { timeStamp: timeStamp };
   const posSignature = bingxSign(secretKey, posParams);
 
   const positions = await axios.get(

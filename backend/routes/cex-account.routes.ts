@@ -109,6 +109,8 @@ router.get('/:id', authMiddleware, getCexAccountById)
  *                 type: string
  *               apiSecret:
  *                 type: string
+ *               passPhrase:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Updated account
