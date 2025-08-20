@@ -1,3 +1,4 @@
+// backend/types/exchange.ts
 export type ExchangeName = "binance" | "okx" | "bybit" | "bitget" | "bingx";
 
 export type ExchangeKeys = {

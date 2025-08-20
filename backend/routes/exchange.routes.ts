@@ -7,6 +7,8 @@ import {
   fetchBybitData,
   fetchBitgetData
 } from "../controllers/exchange.controller";
+import { authMiddleware } from '../middleware/auth.middleware'
+
 
 const router = Router();
 
@@ -21,21 +23,6 @@ const router = Router();
  * @swagger
  * components:
  *   schemas:
- *     ExchangeRequest:
- *       type: object
- *       required:
- *         - apiKey
- *         - secretKey
- *       properties:
- *         apiKey:
- *           type: string
- *           description: The API key from the exchange
- *         secretKey:
- *           type: string
- *           description: The API secret from the exchange
- *         passphrase:
- *           type: string
- *           description: Passphrase required for OKX/Bitget (optional for others)
  *     ExchangeResponse:
  *       type: object
  *       properties:
@@ -56,15 +43,12 @@ const router = Router();
 /**
  * @swagger
  * /api/exchange/binance/data:
- *   post:
+ *   get:
  *     summary: Fetch account data from Binance
  *     tags: [Exchange]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ExchangeRequest'
+ *     description: >
+ *       Fetches Binance account data for the authenticated user.  
+ *       API keys are stored securely in the database when linked, so you don’t need to provide them here.
  *     responses:
  *       200:
  *         description: Successfully fetched data
@@ -72,21 +56,23 @@ const router = Router();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ExchangeResponse'
+ *       401:
+ *         description: Unauthorized (user not logged in)
+ *       404:
+ *         description: Binance account not linked
  */
-router.post("/binance/data", fetchBinanceData);
+router.get("/binance/data", authMiddleware, fetchBinanceData);
 
 /**
  * @swagger
  * /api/exchange/okx/data:
- *   post:
+ *   get:
  *     summary: Fetch account data from OKX
  *     tags: [Exchange]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ExchangeRequest'
+ *     description: >
+ *       Fetches OKX account data for the authenticated user.  
+ *       API keys are stored securely in the database when linked, so you don’t need to provide them here.  
+ *       (Requires API Key, Secret, and Passphrase to be linked beforehand.)
  *     responses:
  *       200:
  *         description: Successfully fetched data
@@ -94,21 +80,23 @@ router.post("/binance/data", fetchBinanceData);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ExchangeResponse'
+ *       401:
+ *         description: Unauthorized (user not logged in)
+ *       404:
+ *         description: OKX account not linked
  */
-router.post("/okx/data", fetchOKXData);
+router.get("/okx/data", authMiddleware, fetchOKXData);
 
 /**
  * @swagger
  * /api/exchange/bingx/data:
- *   post:
+ *   get:
  *     summary: Fetch account data from BingX
  *     tags: [Exchange]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ExchangeRequest'
+ *     description: >
+ *       Fetches BingX account data for the authenticated user.  
+ *       API keys are stored securely in the database when linked, so you don’t need to provide them here.  
+ *       (Requires API Key and Secret to be linked beforehand.)
  *     responses:
  *       200:
  *         description: Successfully fetched data
@@ -116,21 +104,23 @@ router.post("/okx/data", fetchOKXData);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ExchangeResponse'
+ *       401:
+ *         description: Unauthorized (user not logged in)
+ *       404:
+ *         description: BingX account not linked
  */
-router.post("/bingx/data", fetchBingXData);
+router.get("/bingx/data", authMiddleware, fetchBingXData);
 
 /**
  * @swagger
  * /api/exchange/bybit/data:
- *   post:
+ *   get:
  *     summary: Fetch account data from Bybit
  *     tags: [Exchange]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ExchangeRequest'
+ *     description: >
+ *       Fetches Bybit account data for the authenticated user.  
+ *       API keys are stored securely in the database when linked, so you don’t need to provide them here.  
+ *       (Requires API Key and Secret to be linked beforehand.)
  *     responses:
  *       200:
  *         description: Successfully fetched data
@@ -138,21 +128,23 @@ router.post("/bingx/data", fetchBingXData);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ExchangeResponse'
+ *       401:
+ *         description: Unauthorized (user not logged in)
+ *       404:
+ *         description: Bybit account not linked
  */
-router.post("/bybit/data", fetchBybitData);
+router.get("/bybit/data", authMiddleware, fetchBybitData);
 
 /**
  * @swagger
  * /api/exchange/bitget/data:
- *   post:
+ *   get:
  *     summary: Fetch account data from Bitget
  *     tags: [Exchange]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ExchangeRequest'
+ *     description: >
+ *       Fetches Bitget account data for the authenticated user.  
+ *       API keys are stored securely in the database when linked, so you don’t need to provide them here.  
+ *       (Requires API Key, Secret, and optionally Passphrase to be linked beforehand.)
  *     responses:
  *       200:
  *         description: Successfully fetched data
@@ -160,7 +152,11 @@ router.post("/bybit/data", fetchBybitData);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ExchangeResponse'
+ *       401:
+ *         description: Unauthorized (user not logged in)
+ *       404:
+ *         description: Bitget account not linked
  */
-router.post("/bitget/data", fetchBitgetData);
+router.get("/bitget/data", authMiddleware, fetchBitgetData);
 
 export default router;

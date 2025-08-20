@@ -1,10 +1,17 @@
 // src/controllersapi/cex.controller.ts
 import { encrypt } from '../utils/encryption'
 import { prisma } from '../utils/prisma';
+import { ExchangeName } from "../types/exchange";
 
 export const addCexAccount = async (req, res) => {
   const userId = req.user.id
   const { exchangeName, apiKey, apiSecret, label, passphrase } = req.body
+
+  const validExchanges: ExchangeName[] = ["binance", "okx", "bybit", "bitget", "bingx"];
+
+  if (!validExchanges.includes(exchangeName)) {
+    return res.status(400).json({ error: "Unsupported exchange" });
+  }
 
   const exchange = await prisma.exchange.upsert({
     where: { name: exchangeName },
